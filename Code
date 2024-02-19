@@ -1,1 +1,155 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
+struct Employee {
+    char name[50];
+    char id[20];
+    char address[100];
+    int contact;
+    int salary;
+};
+
+struct Employee employees[100];
+int totalEmployees = 0;
+
+void addEmployee() {
+    printf("Enter employee name: ");
+    scanf("%s", employees[totalEmployees].name);
+
+    printf("Enter id: ");
+    scanf("%s", employees[totalEmployees].id);
+
+    printf("Enter address: ");
+    scanf("%s", employees[totalEmployees].address);
+
+    printf("Enter contact: ");
+    scanf("%d", &employees[totalEmployees].contact);
+
+    printf("Enter salary: ");
+    scanf("%d", &employees[totalEmployees].salary);
+
+    totalEmployees++;
+    printf("Employee added successfully!\n");
+}
+
+void showEmployees() {
+    if (totalEmployees != 0) {
+        printf("\nEmployee Details:\n");
+        for (int i = 0; i < totalEmployees; i++) {
+            printf("\nEmployee %d\n", i + 1);
+            printf("Name: %s\n", employees[i].name);
+            printf("ID: %s\n", employees[i].id);
+            printf("Address: %s\n", employees[i].address);
+            printf("Contact: %d\n", employees[i].contact);
+            printf("Salary: %d\n", employees[i].salary);
+        }
+    } else {
+        printf("No employees found.\n");
+    }
+}
+
+void modifyEmployee() {
+    char empId[20];
+    int found = 0;
+
+    printf("Enter the ID of the employee to modify: ");
+    scanf("%s", empId);
+
+    for (int i = 0; i < totalEmployees; i++) {
+        if (strcmp(empId, employees[i].id) == 0) {
+            printf("Enter new details for employee %d:\n", i + 1);
+
+            printf("Enter employee name: ");
+            scanf("%s", employees[i].name);
+
+            printf("Enter new id: ");
+            scanf("%s", employees[i].id);
+
+            printf("Enter new address: ");
+            scanf("%s", employees[i].address);
+
+            printf("Enter new contact: ");
+            scanf("%d", &employees[i].contact);
+
+            printf("Enter new salary: ");
+            scanf("%d", &employees[i].salary);
+
+            found = 1;
+            printf("Employee details modified successfully!\n");
+            break;
+        }
+    }
+
+    if (!found) {
+        printf("Employee with ID %s not found.\n", empId);
+    }
+}
+
+void deleteEmployee() {
+    char empId[20];
+    int found = 0;
+
+    printf("Enter the ID of the employee to delete: ");
+    scanf("%s", empId);
+
+    for (int i = 0; i < totalEmployees; i++) {
+        if (strcmp(empId, employees[i].id) == 0) {
+            // Shift elements to delete the employee
+            for (int j = i; j < totalEmployees - 1; j++) {
+                strcpy(employees[j].name, employees[j + 1].name);
+                strcpy(employees[j].id, employees[j + 1].id);
+                strcpy(employees[j].address, employees[j + 1].address);
+                employees[j].contact = employees[j + 1].contact;
+                employees[j].salary = employees[j + 1].salary;
+            }
+
+            totalEmployees--;
+            found = 1;
+            printf("Employee deleted successfully!\n");
+            break;
+        }
+    }
+
+    if (!found) {
+        printf("Employee with ID %s not found.\n", empId);
+    }
+}
+
+int main() {
+    char choice;
+
+    do {
+        printf("\nEmployee Management System\n");
+        printf("1. Add Employee\n");
+        printf("2. Show Employees\n");
+        printf("3. Modify Employee\n");
+        printf("4. Delete Employee\n");
+        printf("5. Exit\n");
+
+        printf("Enter your choice: ");
+        scanf(" %c", &choice);
+
+        switch (choice) {
+            case '1':
+                addEmployee();
+                break;
+            case '2':
+                showEmployees();
+                break;
+            case '3':
+                modifyEmployee();
+                break;
+            case '4':
+                deleteEmployee();
+                break;
+            case '5':
+                printf("Exiting Employee Management System. Goodbye!\n");
+                break;
+            default:
+                printf("Invalid choice. Please try again.\n");
+        }
+    } while (choice != '5');
+
+    return 0;
+}
